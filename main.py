@@ -138,7 +138,7 @@ def memory_submit():
         memory_right.pack(fill = "both", expand = True)
         globals()["multiplier"] = globals()["multiplier"] * 10
         globals()["memory_score"] = globals()["memory_score"] + 1
-        memory_right.after_id = memory_right.after(5000, memory_game_start)
+        right_text.configure(text = f"Correct!\nCurrent score: {globals()["memory_score"]}")
     else:
         memory_input_frame.forget()
         memory_wrong.pack(fill = "both", expand = True)
@@ -188,7 +188,7 @@ def memory_round():
     memory_input_btn_delete.configure(state = "disabled")
     memory_input_btn_submit.configure(state = "disabled")
 
-    memory_input_field.configure(text = memory_value)
+    memory_input_field.configure(text = f"Memorize this number:\n{memory_value}")
 
     memory_input_field.after_id = memory_input_field.after(5000, memory_game_continue)
 
@@ -351,16 +351,22 @@ memory_input_btn_submit.grid(column = 5, row = 2, padx = (0, 100))
 
 memory_wrong = Frame(root, bg = "red")
 
-wrong_text = Label(memory_wrong, text = "Wrong answer", font = ("Calibri 24 bold"), bg = "red")
+wrong_text = Label(memory_wrong, text = "Wrong answer", font = ("Calibri 24 bold"), bg = "red", fg = "white")
 wrong_text.place(relx = 0.5, rely = 0.25, anchor = CENTER)
 
-wrong_input = Label(memory_wrong, text = "...", font = ("Calibri 18 bold"), bg = "red")
+wrong_input = Label(memory_wrong, text = "...", font = ("Calibri 18 bold"), bg = "red", fg = "white")
 wrong_input.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 
 wrong_btn = Button(memory_wrong, text = "Try again", command = memory_game_start)
 wrong_btn.place(relx = 0.5, rely = 0.7, anchor = CENTER)
 
-memory_right = Frame(root)
+memory_right = Frame(root, bg = "green")
+
+right_text = Label(memory_right, text = "...", font = ("Calibri 24 bold"), bg = "green", fg = "white")
+right_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+right_btn = Button(memory_right, text = "Continue", command = memory_game_start)
+right_btn.place(relx = 0.5, rely = 0.65, anchor = CENTER)
 
 target_frame = Frame(root)
 
