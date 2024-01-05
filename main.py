@@ -144,7 +144,9 @@ def memory_submit():
         memory_wrong.pack(fill = "both", expand = True)
         game_btn.configure(state = "normal")
         analysis_btn.configure(state = "normal")
-        
+        wrong_text.configure(text = f"Wrong answer!\nYour score is: {globals()["memory_score"]}")
+        wrong_input.configure(text = f"Your answer:\n{user_answer}\nRight answer\n{memory_value}")
+
         wb = load_workbook("scores.xlsx")
 
         ws = wb["memory game"]
@@ -192,6 +194,7 @@ def memory_round():
 
 def memory_game_start():
     if globals()["in_progress"] == False:
+        memory_wrong.forget()
         memory_frame.forget()
         memory_input_frame.pack(fill = "both", expand = True)
 
@@ -346,9 +349,16 @@ memory_input_btn_delete.grid(column = 5, row = 1, padx = (0, 100), pady = (15, 0
 memory_input_btn_submit = Button(memory_input_frame, text = "Submit", font = ("Calibri 24 bold"), width = 6, height = 2, command = lambda : get_input("Submit"))
 memory_input_btn_submit.grid(column = 5, row = 2, padx = (0, 100))
 
-memory_wrong = Frame(root)
+memory_wrong = Frame(root, bg = "red")
 
+wrong_text = Label(memory_wrong, text = "Wrong answer", font = ("Calibri 24 bold"), bg = "red")
+wrong_text.place(relx = 0.5, rely = 0.25, anchor = CENTER)
 
+wrong_input = Label(memory_wrong, text = "...", font = ("Calibri 18 bold"), bg = "red")
+wrong_input.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+wrong_btn = Button(memory_wrong, text = "Try again", command = memory_game_start)
+wrong_btn.place(relx = 0.5, rely = 0.7, anchor = CENTER)
 
 memory_right = Frame(root)
 
