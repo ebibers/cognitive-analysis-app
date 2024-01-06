@@ -25,6 +25,7 @@ def game_tab():
     target_frame.forget()
     reaction_frame_score.forget()
     memory_wrong.forget()
+    target_score_frame.forget()
     reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
@@ -39,6 +40,7 @@ def analysis_tab():
     target_frame.forget()
     reaction_frame_score.forget()
     memory_wrong.forget()
+    target_score_frame.forget()
     reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
@@ -54,7 +56,7 @@ def memory_tab():
     game_frame.forget()
 
 def target_tab():
-    target_frame.pack()
+    target_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
 
@@ -220,6 +222,49 @@ def memory_game_start():
         memory_value = random.randrange(1 * multiplier, 10 * multiplier)
         memory_round()
 
+def target_game_end():
+    time_end = time.perf_counter()
+    time_spent = time_end - time_start
+
+    game_btn.configure(state = "normal")
+    analysis_btn.configure(state = "normal")
+    target_area.forget()
+    target_score_frame.pack(fill = "both", expand = True)
+    target_score_text.configure(text = f"Your score is: {round(time_spent, 1)} seconds")
+
+    wb = load_workbook("scores.xlsx")
+
+    ws = wb["target game"]
+
+    ws.append([datetime.now(), round(time_spent, 1)])
+
+    wb.save("scores.xlsx")
+
+def target_clicked(event):
+    globals()["targets_destroyed"] += 1
+
+    if globals()["targets_destroyed"] == 20:
+        target_game_end()
+    else:
+        target_photo_label.place(relx = random.uniform(0, 0.9), rely = random.uniform(0, 0.85))
+
+def target_game_start():
+    target_score_frame.forget()
+    target_frame.forget()
+    target_area.pack(fill = "both", expand = True)
+    game_btn.configure(state = "disabled")
+    analysis_btn.configure(state = "disabled")
+
+    global targets_destroyed
+
+    targets_destroyed = 0
+
+    target_photo_label.place(relx = random.uniform(0, 0.9), rely = random.uniform(0, 0.85))
+
+    target_photo_label.bind("<Button-1>", target_clicked)
+
+    globals()["time_start"] = time.perf_counter()
+
 root = Tk()
 
 root.geometry("960x540")
@@ -368,6 +413,27 @@ right_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 right_btn = Button(memory_right, text = "Continue", command = memory_game_start)
 right_btn.place(relx = 0.5, rely = 0.65, anchor = CENTER)
 
-target_frame = Frame(root)
+target_frame = Frame(root, bg = "white")
+
+target_text = Label(target_frame, text = "Target Game\nSee how fast you can click 20 targets.", font = ("Calibri 24 bold"), bg = "white")
+target_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+target_start_btn = Button(target_frame, text = "Start Game", command = target_game_start)
+target_start_btn.place(relx = 0.5, rely = 0.65, anchor = CENTER)
+
+target_area = Frame(root, bg = "white")
+
+target_small_photo = PhotoImage(file = "target_small.png")
+
+target_photo_label = Label(target_area, image = target_small_photo, bg = "white")
+target_photo_label.image = target_small_photo
+
+target_score_frame = Frame(root, bg = "white")
+
+target_score_text = Label(target_score_frame, text = "...", bg = "white", font = ("Calibri 24 bold"))
+target_score_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
+
+target_score_btn = Button(target_score_frame, text = "Try again", command = target_game_start)
+target_score_btn.place(relx = 0.5, rely = 0.6, anchor = CENTER)
 
 root.mainloop()
