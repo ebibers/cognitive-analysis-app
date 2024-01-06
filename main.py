@@ -25,7 +25,7 @@ def game_tab():
     target_frame.forget()
     reaction_frame_score.forget()
     memory_wrong.forget()
-    reaction_text.configure(text = "Click Anywhere To Start", bg = "white", fg = "black")
+    reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
@@ -39,7 +39,7 @@ def analysis_tab():
     target_frame.forget()
     reaction_frame_score.forget()
     memory_wrong.forget()
-    reaction_text.configure(text = "Click Anywhere To Start", bg = "white", fg = "black")
+    reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
@@ -188,7 +188,7 @@ def memory_round():
     memory_input_btn_delete.configure(state = "disabled")
     memory_input_btn_submit.configure(state = "disabled")
 
-    memory_input_field.configure(text = f"Memorize this number:\n{memory_value}")
+    memory_input_field.configure(text = f"You have 5 seconds to memorize this number:\n{memory_value}")
 
     memory_input_field.after_id = memory_input_field.after(5000, memory_game_continue)
 
