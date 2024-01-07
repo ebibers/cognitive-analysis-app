@@ -26,12 +26,13 @@ def game_tab():
     reaction_frame_score.forget()
     memory_wrong.forget()
     target_score_frame.forget()
+    analysis_dropdown.set("")
     reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
 def analysis_tab():
-    analysis_frame.pack()
+    analysis_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     analysis_btn.configure(relief = SUNKEN)
     game_frame.forget()
@@ -308,7 +309,21 @@ target_btn.grid(column = 2, row = 0, pady = (50, 0), padx = (0, 25))
 
 game_frame.pack(fill = "both", expand = True)
 
-analysis_frame = Frame(root)
+analysis_frame = Frame(root, bg = "white")
+
+analysis_btn_frame = Frame(analysis_frame, borderwidth = 1, relief = "solid")
+analysis_btn_frame.pack(fill = "x", expand = True, anchor = "n")
+
+analysis_btn_frame.columnconfigure(0, weight = 1)
+analysis_btn_frame.columnconfigure(1, weight = 1)
+
+analysis_dropdown = ttk.Combobox(analysis_btn_frame, values = ["Reaction game", "Memory game", "Target game"], state = "readonly")
+analysis_dropdown.grid(column = 0, row = 0, sticky = "w", pady = (15, 15), padx = (15, 0))
+
+analysis_dropdown.bind("<<ComboboxSelected>>",lambda e: analysis_btn_frame.focus())
+
+analysis_analyze_btn = Button(analysis_btn_frame, text = "Analyze", width = 8)
+analysis_analyze_btn.grid(column = 1, row = 0, sticky = "e", pady = (15, 15), padx = (0, 15))
 
 reaction_frame = Frame(root, bg = "white")
 reaction_frame.bind("<Button-1>", reaction_game_start)
