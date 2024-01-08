@@ -6,6 +6,9 @@ import time
 from openpyxl import Workbook, load_workbook
 import os
 from datetime import datetime
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 if not os.path.exists("scores.xlsx"):
     wb = Workbook()
@@ -13,6 +16,15 @@ if not os.path.exists("scores.xlsx"):
     ws.title = "reaction game"
     wb.create_sheet("memory game")
     wb.create_sheet("target game")
+
+    ws.append(["Date", "Score"])
+
+    ws = wb["memory game"]
+    ws.append(["Date", "Score"])
+
+    ws = wb["target game"]
+    ws.append(["Date", "Score"])
+
     wb.save("scores.xlsx")
 
 def game_tab():
@@ -266,6 +278,63 @@ def target_game_start():
 
     globals()["time_start"] = time.perf_counter()
 
+def show_analysis(game):
+    ax.clear()
+    if game == "Reaction game":
+        scores = "scores.xlsx"
+
+        df_reaction = pd.read_excel(scores, sheet_name = "reaction game")
+
+        dates = df_reaction["Date"]
+        scores = df_reaction["Score"]
+
+        canvas.get_tk_widget().pack()
+
+        ax.plot(dates, scores)
+
+        ax.set_title("Reaction Test Scores")
+        ax.set_xlabel("Datetime")
+        ax.set_ylabel("Reaction Time (ms)")
+
+        canvas.draw()
+    elif game == "Memory game":
+        scores = "scores.xlsx"
+
+        df_reaction = pd.read_excel(scores, sheet_name = "memory game")
+
+        dates = df_reaction["Date"]
+        scores = df_reaction["Score"]
+
+        canvas.get_tk_widget().pack()
+
+        ax.plot(dates, scores)
+
+        ax.set_title("Memory Test Scores")
+        ax.set_xlabel("Datetime")
+        ax.set_ylabel("Amount of digits memorized")
+
+        canvas.draw()
+    elif game == "Target game":
+        scores = "scores.xlsx"
+
+        df_reaction = pd.read_excel(scores, sheet_name = "target game")
+
+        dates = df_reaction["Date"]
+        scores = df_reaction["Score"]
+
+        canvas.get_tk_widget().pack()
+
+        ax.plot(dates, scores)
+
+        ax.set_title("Target Test Scores")
+        ax.set_xlabel("Datetime")
+        ax.set_ylabel("Time to destroy 20 targets (seconds)")
+
+        canvas.draw()
+
+def graph_reset():
+    pass
+
 root = Tk()
 
 root.geometry("960x540")
@@ -311,19 +380,49 @@ game_frame.pack(fill = "both", expand = True)
 
 analysis_frame = Frame(root, bg = "white")
 
-analysis_btn_frame = Frame(analysis_frame, borderwidth = 1, relief = "solid")
+analysis_btn_frame = Frame(analysis_frame, borderwidth = 1, relief = "sunken")
 analysis_btn_frame.pack(fill = "x", expand = True, anchor = "n")
 
 analysis_btn_frame.columnconfigure(0, weight = 1)
 analysis_btn_frame.columnconfigure(1, weight = 1)
 
+analysis_dropdown_text = Label(analysis_btn_frame, text = "Select Game:")
+analysis_dropdown_text.grid(column = 0, row = 0, sticky = "w", pady = (5, 5), padx = (15, 0))
+
 analysis_dropdown = ttk.Combobox(analysis_btn_frame, values = ["Reaction game", "Memory game", "Target game"], state = "readonly")
-analysis_dropdown.grid(column = 0, row = 0, sticky = "w", pady = (15, 15), padx = (15, 0))
+analysis_dropdown.grid(column = 0, row = 0, pady = (5, 5), sticky = "w", padx = (90, 0))
 
 analysis_dropdown.bind("<<ComboboxSelected>>",lambda e: analysis_btn_frame.focus())
 
-analysis_analyze_btn = Button(analysis_btn_frame, text = "Analyze", width = 8)
-analysis_analyze_btn.grid(column = 1, row = 0, sticky = "e", pady = (15, 15), padx = (0, 15))
+analysis_analyze_btn = Button(analysis_btn_frame, text = "Show Statistics", width = 15, command = lambda : show_analysis(analysis_dropdown.get()))
+analysis_analyze_btn.grid(column = 1, row = 0, sticky = "e", pady = (5, 5), padx = (0, 15))
+
+analysis_statistics_frame = Frame(analysis_btn_frame, borderwidth = 1, relief = "sunken")
+analysis_statistics_frame.grid(columnspan = 2, row = 1, sticky = "ew")
+
+analysis_statistics_frame.columnconfigure(0, weight = 1)
+analysis_statistics_frame.columnconfigure(1, weight = 1)
+analysis_statistics_frame.columnconfigure(2, weight = 1)
+analysis_statistics_frame.columnconfigure(3, weight = 1)
+
+games_played = Label(analysis_statistics_frame, text = "Games played: -")
+games_played.grid(column = 0, row = 0, pady = (5, 5))
+
+avg_score = Label(analysis_statistics_frame, text = "Average score: -")
+avg_score.grid(column = 1, row = 0)
+
+best_score = Label(analysis_statistics_frame, text = "Best score: -")
+best_score.grid(column = 2, row = 0)
+
+avg_score_10 = Label(analysis_statistics_frame, text = "Average in last 10: -")
+avg_score_10.grid(column = 3, row = 0)
+
+analysis_graph_frame = Frame(analysis_frame, bg = "white")
+analysis_graph_frame.pack(fill = "both", expand = True)
+
+fig, ax = plt.subplots()
+
+canvas = FigureCanvasTkAgg(fig, master = analysis_graph_frame)
 
 reaction_frame = Frame(root, bg = "white")
 reaction_frame.bind("<Button-1>", reaction_game_start)
