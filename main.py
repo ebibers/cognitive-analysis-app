@@ -390,14 +390,14 @@ root = Tk()
 
 root.geometry("960x540")
 root.resizable(height = False, width = False)
-root.title("Cognitive Ability Improvement Tool")
+root.title("Cognitive Ability Analysis Tool")
 
 main_btn_frame = Frame(root)
 main_btn_frame.columnconfigure(0, weight = 1)
 main_btn_frame.columnconfigure(1, weight = 1)
 
-analysis_photo = PhotoImage(file = "chart-histogram.png")
-games_photo = PhotoImage(file = "computer.png")
+analysis_photo = PhotoImage(file = r"icons\chart-histogram.png")
+games_photo = PhotoImage(file = r"icons\computer.png")
 
 btn_font = font.Font(family = "Calibri", weight = "bold", size = 16)
 
@@ -414,9 +414,9 @@ game_frame.columnconfigure(0, weight = 1)
 game_frame.columnconfigure(1, weight = 1)
 game_frame.columnconfigure(2, weight = 1)
 
-reaction_photo = PhotoImage(file = "time-fast.png")
-memory_photo = PhotoImage(file = "square-9.png")
-target_photo = PhotoImage(file = "target.png")
+reaction_photo = PhotoImage(file = r"icons\time-fast.png")
+memory_photo = PhotoImage(file = r"icons\square-9.png")
+target_photo = PhotoImage(file = r"icons\target.png")
 
 reaction_btn = Button(game_frame, text = "Reaction Game", font = ("Calibri 16 bold"), image = reaction_photo, height = 350, width = 250, compound = TOP, command = reaction_tab)
 reaction_btn.grid(column = 0, row = 0, pady = (50, 0), padx = (25, 0))
@@ -588,7 +588,7 @@ target_start_btn.place(relx = 0.5, rely = 0.65, anchor = CENTER)
 
 target_area = Frame(root, bg = "white")
 
-target_small_photo = PhotoImage(file = "target_small.png")
+target_small_photo = PhotoImage(file = r"icons\target_small.png")
 
 target_photo_label = Label(target_area, image = target_small_photo, bg = "white")
 target_photo_label.image = target_small_photo
