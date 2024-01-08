@@ -288,6 +288,23 @@ def show_analysis(game):
         dates = df_reaction["Date"]
         scores = df_reaction["Score"]
 
+        played = scores.count()
+        games_played.configure(text = f"Games played: {played}")
+
+        best = scores.min()
+        best_score.configure(text = f"Best score: {best}ms")
+
+        avg = scores.mean()
+        avg_score.configure(text = f"Average score: {round(avg)}ms")
+
+        if played >= 10:
+            last_10 = scores.tail(10)
+            avg_10 = last_10.mean()
+
+            avg_score_10.configure(text = f"Average in last 10: {round(avg_10)}ms")
+        else:
+            avg_score_10.configure(text = "Average in last 10: -")
+
         canvas.get_tk_widget().pack()
 
         ax.plot(dates, scores)
@@ -305,6 +322,23 @@ def show_analysis(game):
         dates = df_reaction["Date"]
         scores = df_reaction["Score"]
 
+        played = scores.count()
+        games_played.configure(text = f"Games played: {played}")
+
+        best = scores.max()
+        best_score.configure(text = f"Best score: {best} digits")
+
+        avg = scores.mean()
+        avg_score.configure(text = f"Average score: {round(avg, 1)} digits")
+
+        if played >= 10:
+            last_10 = scores.tail(10)
+            avg_10 = last_10.mean()
+
+            avg_score_10.configure(text = f"Average in last 10: {round(avg_10, 1)} digits")
+        else:
+            avg_score_10.configure(text = "Average in last 10: -")
+
         canvas.get_tk_widget().pack()
 
         ax.plot(dates, scores)
@@ -321,6 +355,23 @@ def show_analysis(game):
 
         dates = df_reaction["Date"]
         scores = df_reaction["Score"]
+
+        played = scores.count()
+        games_played.configure(text = f"Games played: {played}")
+
+        best = scores.min()
+        best_score.configure(text = f"Best score: {best} sec")
+
+        avg = scores.mean()
+        avg_score.configure(text = f"Average score: {round(avg, 1)} sec")
+
+        if played >= 10:
+            last_10 = scores.tail(10)
+            avg_10 = last_10.mean()
+
+            avg_score_10.configure(text = f"Average in last 10: {round(avg_10, 1)} sec")
+        else:
+            avg_score_10.configure(text = "Average in last 10: -")
 
         canvas.get_tk_widget().pack()
 
