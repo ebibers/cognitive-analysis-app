@@ -383,8 +383,8 @@ def show_analysis(game):
 
         canvas.draw()
 
-def graph_reset():
-    pass
+def close_app():
+    exit()
 
 root = Tk()
 
@@ -601,4 +601,5 @@ target_score_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 target_score_btn = Button(target_score_frame, text = "Try again", command = target_game_start)
 target_score_btn.place(relx = 0.5, rely = 0.6, anchor = CENTER)
 
+root.protocol("WM_DELETE_WINDOW", close_app)
 root.mainloop()
