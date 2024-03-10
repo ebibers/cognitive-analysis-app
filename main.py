@@ -10,8 +10,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-#Ja neeksistē, tiek izveidots excel fails, kur glabā rezultātus 
-
 if not os.path.exists("scores.xlsx"):
     wb = Workbook()
     ws = wb.active
@@ -29,8 +27,6 @@ if not os.path.exists("scores.xlsx"):
 
     wb.save("scores.xlsx")
 
-#Funkcija nodrošina skatu pārmaiņu, uzspiežot uz spēļu cilnes
-
 def game_tab():
     game_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = SUNKEN)
@@ -47,8 +43,6 @@ def game_tab():
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
-#Funkcija nodrošina skatu pārmaiņu, uzspiežot uz analīzes cilnes
-
 def analysis_tab():
     analysis_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
@@ -64,28 +58,20 @@ def analysis_tab():
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
-#Funkcija nodrošina skatu pārmaiņu, uzspiežot uz reakcijas spēles
-
 def reaction_tab():
     reaction_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
-
-#Funkcija nodrošina skatu pārmaiņu, uzspiežot uz atmiņas spēles
 
 def memory_tab():
     memory_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
 
-#Funkcija nodrošina skatu pārmaiņu, uzspiežot uz mērķu spēles
-
 def target_tab():
     target_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
-
-#funkcija iegūst un saglabā failā reakcijas spēles rezultātu
 
 def reaction_game_end(event):
     time_end = time.perf_counter()
@@ -111,15 +97,11 @@ def reaction_game_end(event):
     game_btn.configure(state = "normal")
     analysis_btn.configure(state = "normal")
 
-#funkcija uzsāk reakcijas spēles nākamo posmu
-
 def reaction_game_continue(): 
     reaction_frame_continue.pack(fill = "both", expand = True)
     reaction_frame.forget()
     global time_start 
     time_start = time.perf_counter()
-
-#funkcija uzsāk reakcijas spēli
 
 def reaction_game_start(event):
     if globals()["in_progress"] == True:
@@ -142,16 +124,12 @@ def reaction_game_start(event):
     
     reaction_frame.after_id = reaction_frame.after(random.randint(1000, 5000), reaction_game_continue)
 
-#funkcija atgriež reakcijas spēli sākuma stācoklī
-
 def reaction_game_reset():
     reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     reaction_frame_score.forget()
     reaction_frame.pack(fill = "both", expand = True)
     globals()["in_progress"] = False
-
-#funkcija attēlo lietotāja ievadu atmiņas spēlē
 
 def get_input(input_number):
     input_start = memory_input_field.cget("text")
@@ -166,8 +144,6 @@ def get_input(input_number):
         full_input = input_start + input_number
 
     memory_input_field.configure(text = full_input)
-
-#funkcija nodrošina atbildes iesniegšanu atmiņas spēlē un pie neparieza ievada beidz spēli un saglabā rezultātu
 
 def memory_submit():
     user_answer = memory_input_field.cget("text")
@@ -196,8 +172,6 @@ def memory_submit():
 
         globals()["in_progress"] = False
 
-#funkcija uzsāk atmiņas spēles minēšana posmu
-
 def memory_game_continue():
     memory_input_btn_0.configure(state = "normal")
     memory_input_btn_1.configure(state = "normal")
@@ -212,8 +186,6 @@ def memory_game_continue():
     memory_input_btn_delete.configure(state = "normal")
     memory_input_btn_submit.configure(state = "normal")
     memory_input_field.configure(text = "")
-
-#funkcija uzsāk atmiņas spēles nākamo raundu, parādot skaitli, kas jāatceras uz 5 sekundēm
 
 def memory_round():
     memory_right.forget()
@@ -234,8 +206,6 @@ def memory_round():
     memory_input_field.configure(text = f"You have 5 seconds to memorize this number:\n{memory_value}")
 
     memory_input_field.after_id = memory_input_field.after(5000, memory_game_continue)
-
-#funkcija uzsāk atmiņas spēli
 
 def memory_game_start():
     if globals()["in_progress"] == False:
@@ -265,8 +235,6 @@ def memory_game_start():
         memory_value = random.randrange(1 * multiplier, 10 * multiplier)
         memory_round()
 
-#funkncija iegūst un saglabā mērķa spēles rezultātu
-
 def target_game_end():
     time_end = time.perf_counter()
     time_spent = time_end - time_start
@@ -285,8 +253,6 @@ def target_game_end():
 
     wb.save("scores.xlsx")
 
-#funkcija uzskaita iznīcinātu mērķi un pārvieto to citur
-
 def target_clicked(event):
     globals()["targets_destroyed"] += 1
 
@@ -294,8 +260,6 @@ def target_clicked(event):
         target_game_end()
     else:
         target_photo_label.place(relx = random.uniform(0, 0.9), rely = random.uniform(0, 0.85))
-
-#funkcija uzsāk mērķa spēli
 
 def target_game_start():
     target_score_frame.forget()
@@ -313,8 +277,6 @@ def target_game_start():
     target_photo_label.bind("<Button-1>", target_clicked)
 
     globals()["time_start"] = time.perf_counter()
-
-#funkcija ģenerē grafu un statistiku attiecīgajam spēles veidam
 
 def show_analysis(game):
     ax.clear()
@@ -345,11 +307,18 @@ def show_analysis(game):
 
         canvas.get_tk_widget().pack()
 
-        ax.plot(dates, scores)
+        xvalues = []
+
+        for x in range(len(dates)):
+            xvalues.append(x)
+
+        ax.plot(xvalues, scores)
 
         ax.set_title("Reaction Test Scores")
-        ax.set_xlabel("Datetime")
+        ax.set_xlabel("Time")
         ax.set_ylabel("Reaction Time (ms)")
+
+        ax.tick_params(labelbottom = False, bottom = False)
 
         canvas.draw()
     elif game == "Memory game":
@@ -379,11 +348,18 @@ def show_analysis(game):
 
         canvas.get_tk_widget().pack()
 
-        ax.plot(dates, scores)
+        xvalues = []
+
+        for x in range(len(dates)):
+            xvalues.append(x)
+
+        ax.plot(xvalues, scores)
 
         ax.set_title("Memory Test Scores")
-        ax.set_xlabel("Datetime")
+        ax.set_xlabel("Time")
         ax.set_ylabel("Amount of digits memorized")
+
+        ax.tick_params(labelbottom = False, bottom = False)
 
         canvas.draw()
     elif game == "Target game":
@@ -413,15 +389,20 @@ def show_analysis(game):
 
         canvas.get_tk_widget().pack()
 
-        ax.plot(dates, scores)
+        xvalues = []
+
+        for x in range(len(dates)):
+            xvalues.append(x)
+
+        ax.plot(xvalues, scores)
 
         ax.set_title("Target Test Scores")
-        ax.set_xlabel("Datetime")
+        ax.set_xlabel("Time")
         ax.set_ylabel("Time to destroy 20 targets (seconds)")
 
-        canvas.draw()
+        ax.tick_params(labelbottom = False, bottom = False)
 
-#matplotlib salauza programmas aizvēršanu, tāpēc bija nepieciešama šāda funkcija
+        canvas.draw()
 
 def close_app():
     exit()
@@ -641,6 +622,5 @@ target_score_text.place(relx = 0.5, rely = 0.5, anchor = CENTER)
 target_score_btn = Button(target_score_frame, text = "Try again", command = target_game_start)
 target_score_btn.place(relx = 0.5, rely = 0.6, anchor = CENTER)
 
-#protokols, kas nodrošina programmas aizvēršanu, jo matplotlib to salauza
 root.protocol("WM_DELETE_WINDOW", close_app)
 root.mainloop()
