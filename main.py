@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+#Creates scores file if it doesnt exist.
+
 if not os.path.exists("scores.xlsx"):
     wb = Workbook()
     ws = wb.active
@@ -27,6 +29,8 @@ if not os.path.exists("scores.xlsx"):
 
     wb.save("scores.xlsx")
 
+#Provides change of frames when clicking game tab
+
 def game_tab():
     game_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = SUNKEN)
@@ -43,6 +47,8 @@ def game_tab():
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
+#Provides change of frames when clicking analysis tab
+
 def analysis_tab():
     analysis_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
@@ -58,20 +64,28 @@ def analysis_tab():
     reaction_frame.configure(bg = "white")
     globals()["in_progress"] = False
 
+#Provides change of frames when clicking reaction game button
+
 def reaction_tab():
     reaction_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
+
+#Provides change of frames when clicking memory game button
 
 def memory_tab():
     memory_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
 
+#Provides change of frames when clicking target game button
+
 def target_tab():
     target_frame.pack(fill = "both", expand = True)
     game_btn.configure(relief = RAISED)
     game_frame.forget()
+
+#Calculates reaction game score and saves to scores file
 
 def reaction_game_end(event):
     time_end = time.perf_counter()
@@ -97,11 +111,15 @@ def reaction_game_end(event):
     game_btn.configure(state = "normal")
     analysis_btn.configure(state = "normal")
 
+#Prompts user to click screen and saves current time 
+
 def reaction_game_continue(): 
     reaction_frame_continue.pack(fill = "both", expand = True)
     reaction_frame.forget()
     global time_start 
     time_start = time.perf_counter()
+
+#Starts reaction game
 
 def reaction_game_start(event):
     if globals()["in_progress"] == True:
@@ -124,12 +142,16 @@ def reaction_game_start(event):
     
     reaction_frame.after_id = reaction_frame.after(random.randint(1000, 5000), reaction_game_continue)
 
+#Resets reaction game
+
 def reaction_game_reset():
     reaction_text.configure(text = "Test your reactions.\nClick anywhere to start", bg = "white", fg = "black")
     reaction_frame.configure(bg = "white")
     reaction_frame_score.forget()
     reaction_frame.pack(fill = "both", expand = True)
     globals()["in_progress"] = False
+
+#Displays input for memory game
 
 def get_input(input_number):
     input_start = memory_input_field.cget("text")
@@ -144,6 +166,8 @@ def get_input(input_number):
         full_input = input_start + input_number
 
     memory_input_field.configure(text = full_input)
+
+#Handles answer for memory game, saves score and ends game if wrong answer, continues if right
 
 def memory_submit():
     user_answer = memory_input_field.cget("text")
@@ -172,6 +196,8 @@ def memory_submit():
 
         globals()["in_progress"] = False
 
+#enables user input after number to memorize disapears
+
 def memory_game_continue():
     memory_input_btn_0.configure(state = "normal")
     memory_input_btn_1.configure(state = "normal")
@@ -186,6 +212,8 @@ def memory_game_continue():
     memory_input_btn_delete.configure(state = "normal")
     memory_input_btn_submit.configure(state = "normal")
     memory_input_field.configure(text = "")
+
+#disables user input and displays number to memorize after for 5 sec
 
 def memory_round():
     memory_right.forget()
@@ -206,6 +234,8 @@ def memory_round():
     memory_input_field.configure(text = f"You have 5 seconds to memorize this number:\n{memory_value}")
 
     memory_input_field.after_id = memory_input_field.after(5000, memory_game_continue)
+
+#Starts memory game and handles next rounds
 
 def memory_game_start():
     if globals()["in_progress"] == False:
@@ -235,6 +265,8 @@ def memory_game_start():
         memory_value = random.randrange(1 * multiplier, 10 * multiplier)
         memory_round()
 
+#saves and calculates target game score
+
 def target_game_end():
     time_end = time.perf_counter()
     time_spent = time_end - time_start
@@ -253,6 +285,8 @@ def target_game_end():
 
     wb.save("scores.xlsx")
 
+#registers users clicked target and places it elsewhere
+
 def target_clicked(event):
     globals()["targets_destroyed"] += 1
 
@@ -260,6 +294,8 @@ def target_clicked(event):
         target_game_end()
     else:
         target_photo_label.place(relx = random.uniform(0, 0.9), rely = random.uniform(0, 0.85))
+
+#starts target game
 
 def target_game_start():
     target_score_frame.forget()
@@ -277,6 +313,8 @@ def target_game_start():
     target_photo_label.bind("<Button-1>", target_clicked)
 
     globals()["time_start"] = time.perf_counter()
+
+#Creates graph and displays statistics from scores file for chosen game mode
 
 def show_analysis(game):
     ax.clear()
