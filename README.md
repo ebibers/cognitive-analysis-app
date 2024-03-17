@@ -1,8 +1,8 @@
-#Cognitive skills analysis tool
+# Cognitive skills analysis tool
 The cognitive skills analysis tool is a python programm that includes three tests which evaluate your cognitive skills.
 The three tests are: reaction test, memory test, coordination test.
 
-##Reaction test preview
+## Reaction test preview
 ![Recording 2024-03-17 at 00 13 39](https://github.com/ebibers/cognitive-analysis-app/assets/137301520/84d232c4-d45e-405c-97d1-3f6567350976)
 
 
